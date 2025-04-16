@@ -1,0 +1,1 @@
+// Middleware que irá verificar o Token JWT, para aunteticar requisições
