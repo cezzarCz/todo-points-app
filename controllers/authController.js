@@ -42,3 +42,44 @@ exports.register = async (req, res) => {
         res.status(500).json({error: 'Erro interno no servidor.'}) // Codigo 500 = Internal Server Error (Deu ruim)
     } 
 };
+
+
+exports.login = async (req, res) => {
+    try {
+        // Extraindo dados da requisição
+        const { email, password } = req.body;
+        
+        // Validar se os campos estão presentes
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
+        }
+
+        // Verificando se o usuário existe no BD
+        const user = await User.findByEmail(email);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario não encontrado.' }); 
+        }
+
+        // Verificando se a senha está correta
+        // Metodo bcrypt.compare() compara a senha fornecida com a senha armazenada
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: 'Credenciais inválidas.' });
+
+        }
+
+        // Gerando token JWT
+        const tokenJwt = jwt.sign(
+            { userId: user.id , email: user.email},
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        // Retorna resposta ao cliente
+        res.status(200).json({ message: 'Login bem-sucedido.', tokenJwt });
+
+    }  catch (error) {
+        console.error('Erro no login do usuário, tente novamente.', error);
+        res.status(500).json({ error: 'Erro interno no servidor.' }); 
+    }
+};
