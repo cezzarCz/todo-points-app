@@ -9,11 +9,16 @@ app.use(express.json()); // Middleware para parsear JSON
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 
-app.use('/api/auth', authRoutes); // Rotas de registtro e login
+app.use('/api/auth', authRoutes); // Rotas de registro e login
 app.use('/api/tasks', taskRoutes); // Rotas de tarefas
 
 // Inicia o servidor na porta definida no arquivo .env ou na porta 3000 por padrão
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
+});
+
+// Rota teste
+app.get('/', (req, res) => {
+    res.status(200).json({ message: 'Bem vindo a API;' });
 });
