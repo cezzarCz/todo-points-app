@@ -11,7 +11,7 @@ const authController = require('../controllers/authController'); // Controlador 
 // POST /api/auth/register
 // Controller: authController.register
 router.post( // Definimos um endpoint que escuta requisições POST na rota '/register'
-    '/register', 
+    '/register',
     authController.register // Função que trata a requisição
 );
 
@@ -19,9 +19,19 @@ router.post( // Definimos um endpoint que escuta requisições POST na rota '/re
 // POST /api/auth/login
 // Controller: authController.login
 router.post(
-    '/login', 
+    '/login',
     authController.login // Função que trata a requisição
-);  
+);
+
+
+// Rota de exclusão de usuário
+// DELETE /api/auth/delete/:id
+// Controller: authController.deleteUser
+router.delete(
+    '/delete', // Rota que espera um ID de usuário na URL
+    authController.deleteUser // Função que trata a requisição
+);
 
 // Exporta o roteador para ser utilizado em outros arquivos
 module.exports = router; // Exporta o objeto router
+

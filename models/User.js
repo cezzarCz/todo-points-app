@@ -20,6 +20,15 @@ class User {
         return rows[0];
     }
 
+    // Metodo para apagar um user do DB
+    static async deleteById(id) {
+        const [result] = await pool.execute(
+            'DELETE FROM users WHERE id = ?',
+            [id]
+        );
+        return result;
+    }
+
 }
 
 module.exports = User;

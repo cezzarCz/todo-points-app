@@ -84,3 +84,27 @@ exports.login = async (req, res) => {
     }
 };
 
+// Método para deletar um usuário (opcional, mas útil para testes)
+exports.deleteUser = async (req, res) => {
+    try {
+        const { id } = req.body; // ID do usuário a ser deletado
+
+        // Verifica se o ID foi fornecido
+        if (!id) {
+            return res.status(400).json({ error: 'ID do usuário é obrigatório.' });
+        }
+
+        // Deletando o usuário do banco de dados
+        const result = await User.deleteById(id);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+
+        // Retorna resposta ao cliente
+        res.status(200).json({ message: 'Usuário deletado com sucesso.' });
+    } catch (error) {
+        console.error('Erro ao deletar usuário.', error);
+        res.status(500).json({ error: 'Erro interno no servidor.' });
+    }
+};
+
