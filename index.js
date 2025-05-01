@@ -1,9 +1,16 @@
 // Arquivo principal do projeto
 const express = require('express');
+const cors = require('cors'); // Middleware para habilitar CORS
 require('dotenv').config();
 
 const app = express();
 app.use(express.json()); // Middleware para parsear JSON
+
+app.use(cors({
+    origin: 'http://localhost:3001',      // permite apenas requests vindos desta origem
+    methods: ['GET','POST','PUT','DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type','Authorization']
+  }));
 
 // Importa e monta as rotas
 const authRoutes = require('./routes/authRoutes');
