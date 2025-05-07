@@ -20,7 +20,6 @@ export default function Login() {
         e.preventDefault();
         setError('');
 
-        // 1) Validações básicas
         if (!email || !password) {
             setError('Email e senha são obrigatórios.');
             return;
@@ -30,12 +29,11 @@ export default function Login() {
             return;
         }
 
-        // 2) Requisição de login
         setLoading(true);
         try {
             const { data } = await api.post('/api/auth/login', { email, password });
             console.log('Login bem-sucedido:', data);
-            // 3) Armazenar token e redirecionar
+            // Armazenar token via Local Storage e redirecionar
             localStorage.setItem('token', data.token);
             navigate('/tasks');
         } catch (err) {
@@ -48,7 +46,8 @@ export default function Login() {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10 p-4 border rounded">
+        <div className="max-w-md mx-auto mt-10 p-4 border rounded shadow-md bg-white">
+            <h1 className="text-4xl font-bold text-purple-900">Bem vindo de volta!</h1>
             <h2 className="text-2xl mb-4">Login</h2>
             {error && <p className="text-red-600 mb-2">{error}</p>}
             <form onSubmit={handleSubmit}>
