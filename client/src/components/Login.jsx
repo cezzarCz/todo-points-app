@@ -1,8 +1,8 @@
-// src/components/Login.jsx
 import { useState } from 'react';
 import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png'; // Importando a logo
+
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -14,7 +14,7 @@ export default function Login() {
     const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Previne o comportamento padrão do formulário
         setError('');
 
         if (!email || !password) {
@@ -30,8 +30,9 @@ export default function Login() {
         try {
             const { data } = await api.post('/api/auth/login', { email, password }); // Enviando dados para o backend
             console.log('Resposta do servidor:', data); // Log para depuração
-            sessionStorage.setItem('accessToken', data.token);
-            navigate('/tasks');
+            localStorage.setItem('accessToken', data.tokenJwt);
+            console.log('Token armazenado:', data.tokenJwt); // Log para depuração
+            navigate('/home'); // Redireciona para a página inicial após login
         } catch (err) {
             const msg = err.response?.data?.error || 'Falha ao autenticar.';
             setError(msg);
