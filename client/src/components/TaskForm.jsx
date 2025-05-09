@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
+import logo from '../assets/logo.png';
 
 export default function TaskForm() {
     const [title, setTitle] = useState('');
@@ -133,99 +134,109 @@ export default function TaskForm() {
         });
     };
     return (
-        <div className="max-w-md mx-auto mt-10 p-4 border rounded">
-            <h2 className="text-2xl mb-4">Nova Tarefa</h2>
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-6">
+            {/* Logo */}
+            <div className="mb-8">
+                <img
+                    src={logo}
+                    alt="EzTo-Do"
+                    className="w-32 h-32 rounded-full shadow-black/70 shadow-lg"
+                />
+            </div>
 
-            {/* Exibição de erro geral */}
-            {errors.general && (
-                <div className="mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded">
-                    {errors.general}
-                </div>
-            )}
+            <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 space-y-4">
+                <h2 className="text-2xl font-semibold mb-4 text-center">Nova Tarefa</h2>
 
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label className="block">Título*</label>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => {
-                            setTitle(e.target.value);
-                            clearError('title');
-                        }}
-                        className={`w-full p-2 border ${errors.title ? 'border-red-500' : ''}`}
-                        required
-                    />
-                    {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
-                </div>
+                {/* Exibição de erro geral */}
+                {errors.general && (
+                    <div className="mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded">
+                        {errors.general}
+                    </div>
+                )}
 
-                <div className="mb-3">
-                    <label className="block">Descrição</label>
-                    <textarea
-                        value={description}
-                        onChange={(e) => {
-                            setDescription(e.target.value);
-                            clearError('description');
-                        }}
-                        className={`w-full p-2 border ${errors.description ? 'border-red-500' : ''}`}
-                    />
-                    {errors.description && (
-                        <p className="text-red-500 text-sm mt-1">{errors.description}</p>
-                    )}
-                    <p className="text-gray-500 text-xs mt-1">
-                        {description.length}/500 caracteres
-                    </p>
-                </div>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Título*</label>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => {
+                                setTitle(e.target.value);
+                                clearError('title');
+                            }}
+                            className={`w-full bg-gray-100 rounded-xl shadow-inner py-3 px-4 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300 ${errors.title ? 'border-red-500' : ''}`}
+                            required
+                        />
+                        {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
+                    </div>
 
-                <div className="mb-3">
-                    <label className="block">Vencimento*</label>
-                    <input
-                        type="date"
-                        value={dueDate}
-                        onChange={(e) => {
-                            setDueDate(e.target.value);
-                            clearError('dueDate');
-                        }}
-                        className={`w-full p-2 border ${errors.dueDate ? 'border-red-500' : ''}`}
-                        required
-                    />
-                    {errors.dueDate && <p className="text-red-500 text-sm mt-1">{errors.dueDate}</p>}
-                </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Descrição</label>
+                        <textarea
+                            value={description}
+                            onChange={(e) => {
+                                setDescription(e.target.value);
+                                clearError('description');
+                            }}
+                            className={`w-full bg-gray-100 rounded-xl shadow-inner py-3 px-4 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300 ${errors.description ? 'border-red-500' : ''}`}
+                        />
+                        {errors.description && (
+                            <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+                        )}
+                        <p className="text-gray-500 text-xs mt-1">
+                            {description.length}/500 caracteres
+                        </p>
+                    </div>
 
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Vencimento*</label>
+                        <input
+                            type="date"
+                            value={dueDate}
+                            onChange={(e) => {
+                                setDueDate(e.target.value);
+                                clearError('dueDate');
+                            }}
+                            className={`w-full bg-gray-100 rounded-xl shadow-inner py-3 px-4 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300 ${errors.dueDate ? 'border-red-500' : ''}`}
+                            required
+                        />
+                        {errors.dueDate && <p className="text-red-500 text-sm mt-1">{errors.dueDate}</p>}
+                    </div>
 
-                <div className="mb-3">
-                    <label className="block">Pontos</label>
-                    <input
-                        type="number"
-                        value={points}
-                        onChange={(e) => {
-                            setPoints(Number(e.target.value));
-                            clearError('points');
-                        }}
-                        className={`w-full p-2 border ${errors.points ? 'border-red-500' : ''}`}
-                        min="0"
-                        max="100"
-                    />
-                    {errors.points && <p className="text-red-500 text-sm mt-1">{errors.points}</p>}
-                </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Pontos</label>
+                        <input
+                            type="number"
+                            value={points}
+                            onChange={(e) => {
+                                setPoints(Number(e.target.value));
+                                clearError('points');
+                            }}
+                            className={`w-full bg-gray-100 rounded-xl shadow-inner py-3 px-4 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300 ${errors.points ? 'border-red-500' : ''}`}
+                            min="0"
+                            max="100"
+                        />
+                        {errors.points && <p className="text-red-500 text-sm mt-1">{errors.points}</p>}
+                    </div>
 
-                <div className="flex space-x-2">
-                    <button
-                        type="submit"
-                        className="flex-1 p-2 bg-green-600 text-white hover:bg-green-700 rounded"
-                    >
-                        Salvar
-                    </button>
+                    <div className="flex space-x-2">
+                        <button
+                            type="submit"
+                            className="flex-1 bg-gradient-to-r from-purple-600 to-purple-400 text-white font-medium py-3 rounded-2xl shadow-lg hover:opacity-90 transition-opacity"
+                        >
+                            Salvar
+                        </button>
 
-                    <button
-                        type="button"
-                        onClick={resetForm}
-                        className="p-2 bg-gray-300 text-gray-800 hover:bg-gray-400 rounded"
-                    >
-                        Limpar
-                    </button>
-                </div>
-            </form>
+                        <button
+                            type="button"
+                            onClick={resetForm}
+                            className="flex-1 bg-gray-300 text-gray-800 font-medium py-3 rounded-2xl shadow-lg hover:bg-gray-400 transition"
+                        >
+                            Limpar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import TasksCard from '../components/TasksCard';
 import ButtonPrimary from '../components/ButtonPrimary';
+import logo from '../assets/logo.png'; // Importando a logo
 
 export default function Home() {
     const [allTasks, setAllTasks] = useState([]);
@@ -63,12 +64,19 @@ export default function Home() {
     const progressPercent = Math.min((weeklyPoints / totalPoints) * 100, 100);
 
     return (
-        <div className="min-h-screen flex flex-col
-            bg-[linear-gradient(180deg,_#F8F9FA,_#D0D0D0)]">
+        <div className="min-h-screen flex flex-col bg-[linear-gradient(180deg,_#F8F9FA,_#D0D0D0)]">
+            {/* Logo */}
+            <div className="flex justify-center items-center py-6">
+                <img
+                    src={logo}
+                    alt="EzTo-Do"
+                    className="w-24 h-24 rounded-full shadow-black/70 shadow-lg"
+                />
+            </div>
+
             <div className="flex-1 px-6 py-4">
                 {/* Card Meta Semanal */}
-                <div className="rounded-2xl shadow-2xl p-5 mb-6 relative
-                    bg-[radial-gradient(ellipse_at_top,_#F8F9FA,_#D0D0D0)] text-black">
+                <div className="rounded-2xl shadow-2xl p-5 mb-6 relative bg-[radial-gradient(ellipse_at_top,_#F8F9FA,_#D0D0D0)] text-black">
                     <h3 className="text-lg font-medium mb-2">Meta Semanal</h3>
                     <p className="text-sm text-gray-500 mb-4">
                         {weeklyPoints} / {totalPoints} pontos
@@ -86,17 +94,11 @@ export default function Home() {
 
                 {/* Filtros */}
                 <div className="flex space-x-4 mb-4">
-                    {[
-                        { key: 'today', label: 'Hoje' },
-                        { key: 'tomorrow', label: 'Amanhã' },
-                        { key: 'week', label: 'Semana' },
-                        { key: 'all', label: 'Todos' },
-                    ].map(f => (
+                    {[{ key: 'today', label: 'Hoje' }, { key: 'tomorrow', label: 'Amanhã' }, { key: 'week', label: 'Semana' }, { key: 'all', label: 'Todos' }].map(f => (
                         <button
                             key={f.key}
                             onClick={() => setFilter(f.key)}
-                            className={`px-4 py-2 rounded-full text-sm transition
-                ${filter === f.key ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600'}`}
+                            className={`px-4 py-2 rounded-full text-sm transition ${filter === f.key ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600'}`}
                         >
                             {f.label}
                         </button>
@@ -106,17 +108,18 @@ export default function Home() {
                 {/* Lista de tarefas */}
                 <div className="space-y-4 mb-6">
                     {tasks.length > 0 ? (
-                        tasks.map(task => (
-                            <TasksCard key={task.id} task={task} />
-                        ))
+                        tasks.map(task => <TasksCard key={task.id} task={task} />)
                     ) : (
                         <p className="text-center text-gray-500">Nenhuma tarefa encontrada.</p>
                     )}
                 </div>
 
-                {/* Botao de adicionar tarefas*/}
+                {/* Botao de adicionar tarefas */}
                 <div className="flex justify-center">
-                    <ButtonPrimary onClick={() => navigate('/tasks/new')} className="w-16 h-16 rounded-full text-4xl p-0 flex items-center justify-center">
+                    <ButtonPrimary
+                        onClick={() => navigate('/tasks/new')}
+                        className="w-16 h-16 rounded-full text-4xl p-0 flex items-center justify-center shadow-lg hover:opacity-90 transition-opacity"
+                    >
                         +
                     </ButtonPrimary>
                 </div>
