@@ -7,6 +7,8 @@ const verifyToken = require('../middlewares/verifyToken');
 // Protegendo rotas com middleware de verificação de token
 router.use(verifyToken);
 
+
+// Estilo RESTful é aplicado aqui, pois as rotas seguem padroes de CRUD.
 router.post('/', taskController.createTask); // Criar tarefa
 router.get('/', taskController.getTasks); // Obter todas as tarefas
 router.put('/:id', taskController.updateTask); // Atualizar tarefa por ID
