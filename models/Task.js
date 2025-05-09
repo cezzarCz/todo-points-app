@@ -4,7 +4,8 @@ const pool = require('../config/db');
 // Definindo classe Task
 class Task {
     // Criacao de tarefa
-    static async create({ userId, title, description, due_date , points}){
+    static async create({ userId, title, description, due_date, points }) {
+        console.log('Dados enviados ao banco de dados:', { userId, title, description, due_date, points });
         const [result] = await pool.execute(
             'INSERT INTO tasks (user_id, title, description, due_date, points) VALUES (?, ?, ?, ?, ?)',
             [userId, title, description, due_date, points]
@@ -22,7 +23,7 @@ class Task {
     }
 
     // Atualiza tarefa
-    static async update(id, { title, description, due_date, status ,points }) {
+    static async update(id, { title, description, due_date, status, points }) {
         const [result] = await pool.execute(
             `UPDATE tasks SET 
                 title = ?, 

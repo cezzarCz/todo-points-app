@@ -10,7 +10,6 @@ export default function Login() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
     const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
     const handleSubmit = async (e) => {

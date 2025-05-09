@@ -2,14 +2,14 @@
 // Lida com a lógica de manipulação de dados das tarefas
 const Task = require('../models/Task'); // Importa o modelo de Tarefa
 
-exports.createTask = async ( req, res) => {
+exports.createTask = async (req, res) => {
     try {
-        const userId = req.userId; // ID do usuário autenticado
+        const userId = req.user.userId; // ID do usuário autenticado
         const { title, description, due_date, points } = req.body; // Extraindo dados do corpo da requisição
-        
+        console.log('Dados recebidos no backend:', { userId, title, description, due_date, points });
         // Validando se todos os campos estão presentes
         if (!title || !description || !due_date || !points) {
-            return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });      
+            return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
         }
 
         // Criando a tarefa no banco de dados
@@ -25,7 +25,7 @@ exports.getTasks = async (req, res) => {
     try {
         const userId = req.userId; // ID do usuário autenticado       
         // Buscando todas as tarefas do usuário no banco de dados
-        const tasks = await Task.findByUserId(userId);
+        const tasks = await Task.findByUserId(userId);""
         res.status(200).json(tasks); // Retorna a lista de tarefas
     } catch (err) {
         console.error('Erro ao buscar tarefas:', err);

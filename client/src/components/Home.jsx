@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import TasksCard from '../components/TasksCard';
 import ButtonPrimary from '../components/ButtonPrimary';
@@ -6,9 +7,9 @@ import ButtonPrimary from '../components/ButtonPrimary';
 export default function Home() {
     const [allTasks, setAllTasks] = useState([]);
     const [filter, setFilter] = useState('today');
-
     const [weeklyPoints, setWeeklyPoints] = useState(0);
     const totalPoints = 100; // exemplo de meta semanal
+    const navigate = useNavigate();
 
     const fetchTasks = async () => {
         try {
@@ -105,14 +106,14 @@ export default function Home() {
                 <div className="space-y-4 mb-6">
                     {tasks.length > 0 ? (
                         tasks.map(task => (
-                            <TaskCard key={task.id} task={task} />
+                            <TasksCard key={task.id} task={task} />
                         ))
                     ) : (
                         <p className="text-center text-gray-500">Nenhuma tarefa encontrada.</p>
                     )}
                 </div>
 
-                {/* Botão Adicionar Tarefa */}
+                {/* Botao de adicionar tarefas*/}
                 <div className="flex justify-center">
                     <ButtonPrimary onClick={() => navigate('/tasks/new')} className="w-16 h-16 rounded-full text-4xl p-0 flex items-center justify-center">
                         +
