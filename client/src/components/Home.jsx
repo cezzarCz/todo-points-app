@@ -14,6 +14,7 @@ export default function Home() {
     const fetchTasks = async () => {
         try {
             const { data } = await api.get('/api/tasks');
+            console.log('Tarefas recebidas:', data); // Log para depuração
             setAllTasks(data);
             // calcular pontos semanais
             const now = new Date();

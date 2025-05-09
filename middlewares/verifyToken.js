@@ -14,12 +14,13 @@ const verifyToken = (req, res, next) => {
 
     const token = authHeader.split(' ')[1]; // Extrai o token do cabeçalho (formato "Bearer token")
     if (!token) {
-        return res.status(403).json({ message: 'Token mal formatado.' }); 
+        return res.status(403).json({ message: 'Token mal formatado.' });
     }
 
     try {
         const verified = jwt.verify(token, process.env.JWT_SECRET); // Verifica o token com a chave secreta
         req.user = verified; // Adiciona os dados do usuário ao objeto req
+        console.log('Usuário autenticado:', req.user); // Log para depuração
         next(); // Continua para o próximo middleware ou rota
     } catch (err) {
         res.status(400).json({ message: 'Token inválido.' });

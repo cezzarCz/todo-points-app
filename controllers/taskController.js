@@ -23,9 +23,8 @@ exports.createTask = async (req, res) => {
 
 exports.getTasks = async (req, res) => {
     try {
-        const userId = req.userId; // ID do usuário autenticado       
-        // Buscando todas as tarefas do usuário no banco de dados
-        const tasks = await Task.findByUserId(userId);""
+        const userId = req.user.userId; // ID do usuário autenticado       
+        const tasks = await Task.findByUserId(userId);// Buscando todas as tarefas do usuário no banco de dados
         res.status(200).json(tasks); // Retorna a lista de tarefas
     } catch (err) {
         console.error('Erro ao buscar tarefas:', err);
