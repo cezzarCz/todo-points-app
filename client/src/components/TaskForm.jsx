@@ -88,7 +88,7 @@ export default function TaskForm() {
         return isValid;
     };
 
-    const clearError = () => {
+    const clearError = (fieldName) => {
         if (errors[fieldName]) {
             setErrors({ ...errors, [fieldName]: '' });
         }
