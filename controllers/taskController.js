@@ -54,3 +54,15 @@ exports.deleteTask = async (req, res) => {
         res.status(500).json({ err: 'Erro interno no servidor.' });
     }
 }
+
+exports.completeTask = async () => {
+    try {
+        const taskId = req.params.id;
+        const { completed } = req.body;
+        await Task.update(taskId, { completed });
+        res.status(200).json({ message: 'Estado de conclusão atualizado com sucesso.' });
+    } catch (err) {
+        console.error('Erro ao atualizar estado de conclusão:', err);
+        res.status(500).json({ err: 'Erro interno no servidor.' });
+    }
+}
