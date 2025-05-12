@@ -58,10 +58,29 @@ export default function Home() {
         });
     };
 
+    // Função para atualizar o status da tarefa
+    const handleComplete = async (taskId) => {
+        try {
+            const task = allTasks.find(t => t.id === taskId);
+            const updatedStatus = task.status === 'pendente' ? 'concluída' : 'pendente';
+
+            // Enviar requisição para atualizar o status
+            await api.put(`/api/tasks/${taskId}`, { status: updatedStatus });
+
+            // Atualizar o estado local
+            setAllTasks(allTasks.map(t => (t.id === taskId ? { ...t, status: updatedStatus } : t)));
+        } catch (err) {
+            console.error('Erro ao atualizar tarefa:', err);
+        }
+    };
+
+
     const tasks = getFilteredTasks();
 
     // Cálculo de progresso semanal
-    const progressPercent = Math.min((weeklyPoints / totalPoints) * 100, 100);
+    const progressPercent = allTasks
+        .filter(task => task.completed)
+        .reduce((sum, t) => sum + (t.points || 0), 0);
 
     return (
         <div className="min-h-screen flex flex-col bg-[linear-gradient(180deg,_#F8F9FA,_#D0D0D0)]">
@@ -108,7 +127,22 @@ export default function Home() {
                 {/* Lista de tarefas */}
                 <div className="space-y-4 mb-6">
                     {tasks.length > 0 ? (
-                        tasks.map(task => <TasksCard key={task.id} task={task} />)
+                        tasks.map(task => (
+                            <TasksCard
+                                key={task.id}
+                                task={task}
+                                onComplete={handleComplete}
+                                onEdit={(task) => navigate('/tasks/new', { state: { task } })}
+                                onDelete={async (taskId) => {
+                                    try {
+                                        await api.delete(`/api/tasks/${taskId}`);
+                                        setAllTasks(allTasks.filter(t => t.id !== taskId));
+                                    } catch (err) {
+                                        console.error('Erro ao excluir tarefa:', err);
+                                    }
+                                }}
+                            />
+                        ))
                     ) : (
                         <p className="text-center text-gray-500">Nenhuma tarefa encontrada.</p>
                     )}

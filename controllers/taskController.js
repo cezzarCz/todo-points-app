@@ -36,6 +36,7 @@ exports.updateTask = async (req, res) => {
     try {
         const taskId = req.params.id; // ID da tarefa a ser atualizada
         const updates = req.body; // Dados a serem atualizados
+        console.log('Dados recebidos para atualização:', { taskId, updates });
         await Task.update(taskId, updates); // Atualizando a tarefa no banco de dados
         res.status(200).json({ message: 'Tarefa atualizada com sucesso.' }); // Retorna mensagem de sucesso
     } catch (err) {
@@ -51,18 +52,6 @@ exports.deleteTask = async (req, res) => {
         res.status(200).json({ message: 'Tarefa deletada com sucesso.' }); // Retorna mensagem de sucesso
     } catch (err) {
         console.error('Erro ao deletar tarefa:', err);
-        res.status(500).json({ err: 'Erro interno no servidor.' });
-    }
-}
-
-exports.completeTask = async () => {
-    try {
-        const taskId = req.params.id;
-        const { completed } = req.body;
-        await Task.update(taskId, { completed });
-        res.status(200).json({ message: 'Estado de conclusão atualizado com sucesso.' });
-    } catch (err) {
-        console.error('Erro ao atualizar estado de conclusão:', err);
         res.status(500).json({ err: 'Erro interno no servidor.' });
     }
 }

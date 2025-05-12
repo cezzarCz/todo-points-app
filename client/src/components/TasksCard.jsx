@@ -6,10 +6,10 @@ export default function TaskCard({ task, onEdit, onDelete, onComplete }) {
       <div className="flex items-center space-x-4">
         <input
           type="checkbox"
-          checked={task.completed}
+          checked={task.status === 'concluída'}
           onChange={() => onComplete(task.id)}
           className="w-5 h-5"
-          style={{ accentColor: task.completed ? '#a259ff' : '#7b3eff' }}
+          style={{ accentColor: task.status === 'concluída' ? '#a259ff' : '#7b3eff' }}
         />
         <div>
           <h4 className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>

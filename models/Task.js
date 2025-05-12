@@ -26,13 +26,13 @@ class Task {
     static async update(id, { title, description, due_date, status, points }) {
         const [result] = await pool.execute(
             `UPDATE tasks SET 
-                title = ?, 
-                description = ?, 
-                due_date = ?, 
-                status = ?, 
-                points = ? 
+                title = COALESCE(?, title),
+                description = COALESCE(?, description),
+                due_date = COALESCE(?, due_date),
+                status = COALESCE(?, status), 
+                points = COALESCE(?, points) 
             WHERE id = ?`,
-            [title, description, due_date, status, points, id]
+            [title || null, description || null, due_date || null, status || null, points || null, id]
         );
         return result;
     }
