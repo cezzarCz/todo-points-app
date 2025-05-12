@@ -18,9 +18,37 @@ export default function TaskCard({ task, onEdit, onDelete, onComplete }) {
           <p className="text-sm text-gray-500">{task.description}</p>
         </div>
       </div>
-      <div className="space-x-2">
-        <button onClick={() => onEdit(task)} className="text-blue-500">✏️</button>
-        <button onClick={() => onDelete(task.id)} className="text-red-500">🗑️</button>
+      {/*Botões de editar e excluir tarefa*/}
+      <div className="flex space-x-4">
+        <button
+          onClick={() => onEdit(task)}
+          className="
+            flex flex-col items-center
+            text-blue-500 
+            cursor-pointer
+            shadow
+            hover:shadow-lg
+            transition-shadow
+            focus:outline-none
+            hover:text-blue-700">
+          <span className='text-xl'>✏️</span>
+          <span className='text-xs mt-1'>Editar</span>
+        </button>
+
+        <button
+          onClick={() => onDelete(task.id)}
+          className="
+            flex flex-col items-center 
+            text-red-500 
+            cursor-pointer
+            shadow
+            hover:shadow-lg
+            transition-shadow
+            focus:outline-none 
+            hover:text-red-700">
+          <span className='text-xl'>🗑️</span>
+          <span className='text-xs mt-1'>Excluir</span>
+        </button>
       </div>
     </div>
   );

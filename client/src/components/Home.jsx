@@ -127,7 +127,13 @@ export default function Home() {
                 </div>
 
                 {/* Lista de tarefas */}
-                <div className="space-y-4 mb-6">
+                <h2 className="text-lg font-medium mb-4">Suas Tarefas {
+                    filter === 'today' ? 'para hoje' :
+                        filter === 'tomorrow' ? 'para amanhã' :
+                            filter === 'week' ? 'para esta semana' :
+                                filter === 'all' ? '' : `para ${filter} `}
+                </h2>
+                <div className="space-y-4 mb-6 flex flex-col">
                     {tasks.length > 0 ? (
                         tasks.map(task => (
                             <TasksCard
