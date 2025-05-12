@@ -78,9 +78,11 @@ export default function Home() {
     const tasks = getFilteredTasks();
 
     // Cálculo de progresso semanal
-    const progressPercent = allTasks
-        .filter(task => task.completed)
+    const progressPoints = allTasks
+        .filter(task => task.status === 'concluída')
         .reduce((sum, t) => sum + (t.points || 0), 0);
+
+    const progressPercent = totalPoints > 0 ? (progressPoints / totalPoints) * 100 : 0;
 
     return (
         <div className="min-h-screen flex flex-col bg-[linear-gradient(180deg,_#F8F9FA,_#D0D0D0)]">
@@ -97,8 +99,8 @@ export default function Home() {
                 {/* Card Meta Semanal */}
                 <div className="rounded-2xl shadow-2xl p-5 mb-6 relative bg-[radial-gradient(ellipse_at_top,_#F8F9FA,_#D0D0D0)] text-black">
                     <h3 className="text-lg font-medium mb-2">Meta Semanal</h3>
-                    <p className="text-sm text-gray-500 mb-4">
-                        {weeklyPoints} / {totalPoints} pontos
+                    <p className="text-sm text-purple-600 mb-4">
+                        {progressPoints} / {totalPoints} pontos
                     </p>
                     <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                         <div

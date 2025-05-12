@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../api/axios';
 import logo from '../assets/logo.png';
 
@@ -9,6 +9,8 @@ export default function TaskForm() {
     const [dueDate, setDueDate] = useState('');
     const [status, setStatus] = useState('pending');
     const [points, setPoints] = useState(0);
+    const location = useLocation();
+    const task = location.state?.task || null;
 
     // Objeto de erro para cada campo
     const [errors, setErrors] = useState({
@@ -103,12 +105,23 @@ export default function TaskForm() {
             points
         });
         try {
-            await api.post('/api/tasks', {
-                title,
-                description,
-                due_date: dueDate,
-                points
-            });
+
+            if (task) {
+                // Atualiza a task existente
+                await api.put(`/api/tasks/${task.id}`, {
+                    title,
+                    description,
+                    due_date: dueDate,
+                    points
+                });
+            } else {
+                await api.post('/api/tasks', {
+                    title,
+                    description,
+                    due_date: dueDate,
+                    points
+                });
+            }
             // Redireciona para a página de tarefas após o envio bem-sucedido
             navigate('/home');
         } catch (err) {
@@ -145,7 +158,9 @@ export default function TaskForm() {
             </div>
 
             <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 space-y-4">
-                <h2 className="text-2xl font-semibold mb-4 text-center">Nova Tarefa</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-center">
+                    {task ? 'Editar Tarefa Existente' : 'Criar Nova Tarefa'}
+                </h2>
 
                 {/* Exibição de erro geral */}
                 {errors.general && (
