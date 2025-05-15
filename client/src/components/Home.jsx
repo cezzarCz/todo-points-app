@@ -9,7 +9,8 @@ export default function Home() {
     const [allTasks, setAllTasks] = useState([]);
     const [filter, setFilter] = useState('today');
     const [weeklyPoints, setWeeklyPoints] = useState(0);
-    const totalPoints = 100; // exemplo de meta semanal
+    const [totalPoints, setTotalPoints] = useState(100);
+    const [editingGoal, setEditingGoal] = useState(false);
     const navigate = useNavigate();
 
     const fetchTasks = async () => {
@@ -99,8 +100,35 @@ export default function Home() {
                 {/* Card Meta Semanal */}
                 <div className="rounded-2xl shadow-2xl p-5 mb-6 relative bg-[radial-gradient(ellipse_at_top,_#F8F9FA,_#D0D0D0)] text-black">
                     <h3 className="text-lg font-medium mb-2">Meta Semanal</h3>
-                    <p className="text-sm text-purple-600 mb-4">
-                        {progressPoints} / {totalPoints} pontos
+                    <p className="text-sm text-purple-600 mb-4 flex items-center gap-2">
+                        {progressPoints} /
+                        {editingGoal ? (
+                            <input
+                                type="number"
+                                min={1}
+                                max={1000}
+                                placeholder="Defina sua meta"
+                                value={totalPoints}
+                                autoFocus
+                                onChange={(e) => setTotalPoints(Number(e.target.value))}
+                                onBlur={() => setEditingGoal(false)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        setEditingGoal(false);
+                                    }
+                                }}
+                                className="w-20 px-2 py-1 rounded border border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-600"
+                            />
+                        ) : (
+                            <span
+                                className="font-bold cursor-pointer underline underline-offset-2"
+                                title='Clique para editar sua meta'
+                                onClick={() => setEditingGoal(true)}
+                            >
+                                {totalPoints}
+                            </span>
+                        )}
+                        pontos
                     </p>
                     <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                         <div
