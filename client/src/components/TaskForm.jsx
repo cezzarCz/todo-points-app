@@ -53,8 +53,8 @@ export default function TaskForm() {
         } else if (description.length < 5) {
             newErrors.description = 'A descrição deve ter pelo menos 5 caracteres.';
             isValid = false;
-        } else if (description.length > 300) {
-            newErrors.description = 'A descrição deve ter no máximo 200 caracteres.';
+        } else if (description.length > 500) {
+            newErrors.description = 'A descrição deve ter no máximo 500 caracteres.';
             isValid = false;
         }
 
