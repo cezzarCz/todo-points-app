@@ -9,6 +9,8 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
     const navigate = useNavigate();
     const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
