@@ -9,6 +9,8 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
     const navigate = useNavigate();
     const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
@@ -93,30 +95,26 @@ export default function Login() {
                     {loading ? 'Entrando...' : 'Entrar'}
                 </button>
 
-                {/* Divider “or” */}
-                <div className="flex items-center my-4">
-                    <div className="flex-grow h-px bg-gray-300" />
-                    <span className="px-2 text-gray-400 text-sm">or</span>
-                    <div className="flex-grow h-px bg-gray-300" />
+                {/* Divisor */}
+                <div className="flex flex-col items-center my-4">
+                    <div className="flex items-center w-full mb-4">
+                        <div className="flex-1 h-px bg-gray-300" />
+                        <span className="mx-4 text-gray-400 text-sm">ou</span>
+                        <div className="flex-1 h-px bg-gray-300" />
+                    </div>
+                    <span className="text-gray-400 text-sm mb-1">Não tem uma conta?</span>
+                    <a href="/register" className="text-purple-600 hover:underline mb-2">Crie sua conta</a>
+                    <div className="w-full h-px bg-gray-300" />
                 </div>
-
-                {/* Social Buttons */}
-                <button
-                    type="button"
-                    className="w-full flex items-center justify-center py-3 rounded-xl border border-gray-300 hover:bg-gray-50 transition"
-                >
-                    <img src="/icons/google.svg" alt="Google" className="w-5 h-5 mr-2" />
-                    Continue with Google
-                </button>
 
                 {/* Terms */}
                 <p className="text-xs text-gray-400 mt-4 text-center">
-                    By clicking enter, you agree to our{' '}
-                    <a href="#" className="underline">Terms of Service</a> and{' '}
-                    <a href="#" className="underline">Privacy Policy</a>.
+                    Ao clicar em 'Entrar', você concorda com nossos{' '}
+                    <a href="#" className="underline">Termos de Serviço</a> e{' '}
+                    <a href="#" className="underline">Política de Privadidade</a>.
                 </p>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 }
 1

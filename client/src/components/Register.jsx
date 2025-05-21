@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
 import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png'; // Importando a logo
@@ -8,6 +8,8 @@ export default function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     // Estados de erro/feedback
     const [error, setError] = useState('');
@@ -35,7 +37,10 @@ export default function Register() {
             setError('A senha deve ter ao menos 6 caracteres.');
             return;
         }
-
+        if (password !== confirmPassword) {
+            setError('As senhas não coincidem.');
+            return;
+        }
         // 2) Envia ao backend
         setLoading(true);
         try {
@@ -46,8 +51,8 @@ export default function Register() {
             });
             console.log('Resposta do servidor:', data);
             // Se criou, armazena token e redireciona
-            localStorage.setItem('token', data.token);
-            navigate('/tasks');
+            localStorage.setItem('accessToken', data.tokenJwt);
+            navigate('/home');
         } catch (err) {
             console.error(err);
             // Captura mensagem de erro do backend
@@ -103,14 +108,70 @@ export default function Register() {
                 />
 
                 {/* Senha */}
-                <input
-                    type="password"
-                    placeholder="Senha"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    required
-                    className="w-full bg-gray-100 rounded-xl shadow-inner py-3 px-4 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300"
-                />
+                <div className="relative">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Senha"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        required
+                        className="w-full bg-gray-100 rounded-xl shadow-inner py-3 px-4 pr-12 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                        tabIndex={-1}
+                        aria-label={showPassword ? "Esconder senha" : "Mostrar senha"}
+                    >
+                        {showPassword ? (
+                            // Ícone de olho aberto
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        ) : (
+                            // Ícone de olho fechado
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.293-3.95m3.249-2.383A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.956 9.956 0 01-4.043 5.197M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3l18 18" />
+                            </svg>
+                        )}
+                    </button>
+                </div>
+
+                {/* Confirmar Senha */}
+                <div className="relative">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Confirmar Senha"
+                        value={confirmPassword}
+                        onChange={e => setConfirmPassword(e.target.value)}
+                        required
+                        className="w-full bg-gray-100 rounded-xl shadow-inner py-3 px-4 pr-12 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                        tabIndex={-1}
+                        aria-label={showPassword ? "Esconder senha" : "Mostrar senha"}
+                    >
+                        {showPassword ? (
+                            // Ícone de olho aberto
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        ) : (
+                            // Ícone de olho fechado
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.293-3.95m3.249-2.383A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.956 9.956 0 01-4.043 5.197M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3l18 18" />
+                            </svg>
+                        )}
+                    </button>
+                </div>
 
                 {/* Botão Registrar */}
                 <button
