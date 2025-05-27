@@ -156,7 +156,8 @@ export default function TaskForm() {
                 <img
                     src={logo}
                     alt="EzTo-Do"
-                    className="w-32 h-32 rounded-full shadow-black/70 shadow-lg"
+                    className="w-32 h-32 rounded-full shadow-black/70 shadow-lg cursor-pointer"
+                    onClick={() => navigate('/home')}
                 />
             </div>
 
@@ -183,10 +184,17 @@ export default function TaskForm() {
                                 setTitle(e.target.value);
                                 clearError('title');
                             }}
+                            maxLength={50}
                             className={`w-full bg-gray-100 rounded-xl shadow-inner py-3 px-4 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300 ${errors.title ? 'border-red-500' : ''}`}
                             required
                         />
                         {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
+                        <p className="text-gray-500 text-xs mt-1">
+                            {title.length}/50 caracteres
+                        </p>
+                        {title.length === 50 && (
+                            <p className="text-red-500 text-sm mt-1">O título não pode exceder 50 caracteres.</p>
+                        )}
                     </div>
                     {/* Descrição */}
                     <div>
@@ -246,6 +254,10 @@ export default function TaskForm() {
                             max="100"
                         />
                         {errors.points && <p className="text-red-500 text-sm mt-1">{errors.points}</p>}
+                        <p className="text-gray-500 text-xs mt-1">
+                            <span>Mínimo: 1</span>
+                            <span className="ml-2">Máximo: 100</span>
+                        </p>
                         {points === '100' && (
                             <p className="text-red-500 text-sm mt-1">O valor máximo de pontos é 100.</p>
                         )}
