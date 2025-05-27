@@ -8,7 +8,7 @@ export default function TaskForm() {
     const [description, setDescription] = useState('');
     const [dueDate, setDueDate] = useState('');
     const [status, setStatus] = useState('pending');
-    const [points, setPoints] = useState(0);
+    const [points, setPoints] = useState('');
     const location = useLocation();
     const task = location.state?.task || null;
 
@@ -98,11 +98,14 @@ export default function TaskForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) return; // Se o formulário não for válido, não envia
+
+        const numericPoints = Number(points);
+
         console.log('Dados enviados:', {
             title,
             description,
             due_date: dueDate,
-            points
+            points: numericPoints
         });
         try {
 
@@ -112,14 +115,14 @@ export default function TaskForm() {
                     title,
                     description,
                     due_date: dueDate,
-                    points
+                    points: numericPoints
                 });
             } else {
                 await api.post('/api/tasks', {
                     title,
                     description,
                     due_date: dueDate,
-                    points
+                    points: numericPoints
                 });
             }
             // Redireciona para a página de tarefas após o envio bem-sucedido
@@ -137,7 +140,7 @@ export default function TaskForm() {
         setDescription('');
         setDueDate('');
         setStatus('pending');
-        setPoints(0);
+        setPoints();
         setErrors({
             title: '',
             description: '',
@@ -170,6 +173,7 @@ export default function TaskForm() {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Título */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Título*</label>
                         <input
@@ -184,7 +188,7 @@ export default function TaskForm() {
                         />
                         {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
                     </div>
-
+                    {/* Descrição */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Descrição</label>
                         <textarea
@@ -193,6 +197,7 @@ export default function TaskForm() {
                                 setDescription(e.target.value);
                                 clearError('description');
                             }}
+                            maxLength={500}
                             className={`w-full bg-gray-100 rounded-xl shadow-inner py-3 px-4 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300 ${errors.description ? 'border-red-500' : ''}`}
                         />
                         {errors.description && (
@@ -201,8 +206,11 @@ export default function TaskForm() {
                         <p className="text-gray-500 text-xs mt-1">
                             {description.length}/500 caracteres
                         </p>
+                        {description.length === 500 && (
+                            <p className="text-red-500 text-sm mt-1">A descrição não pode exceder 500 caracteres.</p>
+                        )}
                     </div>
-
+                    {/* Data de vencimento */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Vencimento*</label>
                         <input
@@ -217,21 +225,30 @@ export default function TaskForm() {
                         />
                         {errors.dueDate && <p className="text-red-500 text-sm mt-1">{errors.dueDate}</p>}
                     </div>
-
+                    {/* Pontos */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Pontos</label>
                         <input
-                            type="number"
+                            type="text"
                             value={points}
                             onChange={(e) => {
-                                setPoints(Number(e.target.value));
-                                clearError('points');
+                                const value = e.target.value;
+                                console.log('Valor de pontos:', value);
+                                // Limitando o valor de pontos entre 0 e 100
+                                if (value === '' || (Number(value) >= 0 && Number(value) <= 100)) {
+                                    setPoints(value);
+                                    clearError('points');
+                                }
+
                             }}
                             className={`w-full bg-gray-100 rounded-xl shadow-inner py-3 px-4 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300 ${errors.points ? 'border-red-500' : ''}`}
                             min="0"
                             max="100"
                         />
                         {errors.points && <p className="text-red-500 text-sm mt-1">{errors.points}</p>}
+                        {points === '100' && (
+                            <p className="text-red-500 text-sm mt-1">O valor máximo de pontos é 100.</p>
+                        )}
                     </div>
 
                     <div className="flex space-x-2">
