@@ -20,7 +20,7 @@ export default function TaskCard({ task, onEdit, onDelete, onComplete }) {
           </p>
         </div>
       </div>
-      {/*Botões de editar e excluir tarefa*/}
+      {/*Botões de editar e excluir tarefa (a)*/} 
       <div className="flex flex-col space-y-2 ml-4 flex-shrink-0">
         <button
           onClick={() => onEdit(task)}

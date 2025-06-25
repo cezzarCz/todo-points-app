@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../api/axios';
 import logo from '../assets/logo.png';
@@ -11,6 +11,18 @@ export default function TaskForm() {
     const [points, setPoints] = useState('');
     const location = useLocation();
     const task = location.state?.task || null;
+    const navigate = useNavigate();
+
+
+    // Se a tarefa já existir, preenche os campos com os dados
+    useEffect(() => {
+        if (task) {
+            setTitle(task.title || '');
+            setDescription(task.description || '');
+            setDueDate(task.due_date ? task.due_date.slice(0, 10) : '');
+            setPoints(task.points?.toString() || '');
+        }
+    }, [task]);
 
     // Objeto de erro para cada campo
     const [errors, setErrors] = useState({
@@ -19,9 +31,6 @@ export default function TaskForm() {
         dueDate: '',
         points: '',
     });
-
-    const navigate = useNavigate();
-
 
     // Função de validação de campos do forms
     const validateForm = () => {
