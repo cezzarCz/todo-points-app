@@ -36,9 +36,17 @@ exports.updateTask = async (req, res) => {
     try {
         const taskId = req.params.id; // ID da tarefa a ser atualizada
         const updates = req.body; // Dados a serem atualizados
-        console.log('Dados recebidos para atualização:', { taskId, updates });
-        await Task.update(taskId, updates); // Atualizando a tarefa no banco de dados
-        res.status(200).json({ message: 'Tarefa atualizada com sucesso.' }); // Retorna mensagem de sucesso
+        const userId = req.user.userId;
+        const task = await Task.findById(taskId);
+        if (!task) {
+            return res.status(404).json({ error: 'Tarefa não encontrada.' });
+        }
+        // Verificando se user é o dono da tarefa
+        if (task.user_id !== userId) {
+            return res.status(403).json({ error: 'Você não tem permissão para atualizar esta tarefa.' });
+        }
+        await Task.update(taskId, updates);
+        res.status(200).json({ message: 'Tarefa atualizada com sucesso.' });
     } catch (err) {
         console.error('Erro ao atualizar tarefa:', err);
         res.status(500).json({ err: 'Erro interno no servidor.' });
@@ -47,9 +55,17 @@ exports.updateTask = async (req, res) => {
 
 exports.deleteTask = async (req, res) => {
     try {
-        const taskId = req.params.id; // ID da tarefa a ser deletada
-        await Task.delete(taskId); // Deletando a tarefa no banco de dados
-        res.status(200).json({ message: 'Tarefa deletada com sucesso.' }); // Retorna mensagem de sucesso
+        const taskId = req.params.id;
+        const userId = req.user.userId; 
+        const task = await Task.findById(taskId);
+        if (!task) {
+            return res.status(404).json({ error: 'Tarefa não encontrada.'});
+        }
+        if (task.user_id !== userId) {
+            return res.status(404).json({error: 'Você não tem permissão para deletar esta tarefa.'});
+        }
+        await Task.delete(taskId);
+        res.status(200).json({ message: 'Tarefa deletada com sucesso.' });
     } catch (err) {
         console.error('Erro ao deletar tarefa:', err);
         res.status(500).json({ err: 'Erro interno no servidor.' });

@@ -45,6 +45,15 @@ class Task {
         );
         return result;
     }
+
+    // Busca tarefa por ID
+    static async findById(id){
+        const [rows] = await pool.execute(
+            'SELECT * FROM tasks WHERE id = ?',
+            [id]
+        );
+        return rows[0]; // Retorna a primeira tarefa encontrada
+    }
 }
 
 module.exports = Task;
