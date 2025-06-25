@@ -1,11 +1,7 @@
-// Arquivo que lida com as rotas de autenticação (registro e login) da API
-
-const express = require('express'); // Framework para criar APIs
+const express = require('express');
 const router = express.Router(); // Cria um objeto Router, roteador para definir as rotas
-
-// Importa o controlador de autenticação
-const authController = require('../controllers/authController'); // Controlador de autenticação
-
+const authController = require('../controllers/authController');
+const verifyToken = require('../middlewares/verifyToken');
 
 // Rota de registro de usuário
 // POST /api/auth/register
@@ -28,7 +24,8 @@ router.post(
 // DELETE /api/auth/delete/:id
 // Controller: authController.deleteUser
 router.delete(
-    '/delete', // Rota que espera um ID de usuário na URL
+    '/me', // Alteração para usar '/me' para referenciar o usuário autenticado
+    verifyToken,
     authController.deleteUser // Função que trata a requisição
 );
 
